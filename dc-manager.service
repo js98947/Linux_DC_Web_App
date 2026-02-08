@@ -1,0 +1,18 @@
+[Unit]
+Description=Domain Controller Web Manager
+After=network.target samba-ad-dc.service
+Requires=samba-ad-dc.service
+
+[Service]
+Type=notify
+User=root
+Group=root
+WorkingDirectory=/opt/dc-manager
+ExecStart=/opt/dc-manager/venv/bin/gunicorn --config gunicorn.conf.py wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=/opt/dc-manager/.env
+
+[Install]
+WantedBy=multi-user.target

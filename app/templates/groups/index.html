@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Groups - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-diagram-3"></i> Groups</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('groups.create') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create Group
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if groupnames %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Group Name</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for groupname in groupnames %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index }}</td>
+                        <td>
+                            <a href="{{ url_for('groups.detail', groupname=groupname) }}">
+                                <i class="bi bi-diagram-3"></i> {{ groupname }}
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('groups.detail', groupname=groupname) }}"
+                               class="btn btn-outline-secondary btn-action">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <form method="POST" action="{{ url_for('groups.remove', groupname=groupname) }}"
+                                  class="d-inline" onsubmit="return confirm('Delete group {{ groupname }}?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-outline-danger btn-action">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-diagram-3"></i>
+            <p>No groups found.</p>
+            <a href="{{ url_for('groups.create') }}" class="btn btn-success">Create the first group</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

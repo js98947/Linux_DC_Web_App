@@ -1,0 +1,77 @@
+/* Domain Controller Manager - Custom Styles */
+
+body {
+    min-height: 100vh;
+    background-color: #1a1d21;
+}
+
+.card {
+    border: 1px solid #2d3238;
+    background-color: #212529;
+}
+
+.card-header {
+    border-bottom: 1px solid #2d3238;
+}
+
+.stat-card {
+    transition: transform 0.15s ease-in-out;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-card .stat-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #adb5bd;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8125rem;
+}
+
+.detail-table th {
+    width: 30%;
+    color: #adb5bd;
+    font-weight: 500;
+}
+
+.detail-table td {
+    word-break: break-all;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 10vh auto;
+}
+
+.login-card {
+    background: #212529;
+    border: 1px solid #2d3238;
+    border-radius: 0.5rem;
+}
+
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}

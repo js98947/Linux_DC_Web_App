@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Create User - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-person-plus"></i> Create User</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('users.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Users
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" class="row g-3">
+            {{ form.hidden_tag() }}
+
+            <div class="col-md-6">
+                <label class="form-label">Username <span class="text-danger">*</span></label>
+                {{ form.username(class="form-control", placeholder="jdoe") }}
+                {% for error in form.username.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                {{ form.mail(class="form-control", placeholder="jdoe@example.local") }}
+                {% for error in form.mail.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">First Name</label>
+                {{ form.given_name(class="form-control", placeholder="John") }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Last Name</label>
+                {{ form.surname(class="form-control", placeholder="Doe") }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Password <span class="text-danger">*</span></label>
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                {{ form.confirm_password(class="form-control") }}
+                {% for error in form.confirm_password.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    {{ form.must_change_password(class="form-check-input") }}
+                    <label class="form-check-label">User must change password at next login</label>
+                </div>
+            </div>
+
+            <div class="col-12">
+                {{ form.submit(class="btn btn-primary") }}
+                <a href="{{ url_for('users.index') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

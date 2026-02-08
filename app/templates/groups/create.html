@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Create Group - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-plus-circle"></i> Create Group</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('groups.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Groups
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" class="row g-3">
+            {{ form.hidden_tag() }}
+
+            <div class="col-md-6">
+                <label class="form-label">Group Name <span class="text-danger">*</span></label>
+                {{ form.groupname(class="form-control", placeholder="IT-Admins") }}
+                {% for error in form.groupname.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Group Type</label>
+                {{ form.group_type(class="form-select") }}
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Description</label>
+                {{ form.description(class="form-control", placeholder="Optional description") }}
+            </div>
+
+            <div class="col-12">
+                {{ form.submit(class="btn btn-success") }}
+                <a href="{{ url_for('groups.index') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

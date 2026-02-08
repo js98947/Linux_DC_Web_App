@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Computers - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-pc-display"></i> Computers</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('computers.create') }}" class="btn btn-info">
+            <i class="bi bi-plus-circle"></i> Add Computer
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if computer_names %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Computer Name</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name in computer_names %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index }}</td>
+                        <td>
+                            <a href="{{ url_for('computers.detail', computer_name=name) }}">
+                                <i class="bi bi-pc-display"></i> {{ name }}
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('computers.detail', computer_name=name) }}"
+                               class="btn btn-outline-secondary btn-action">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <form method="POST" action="{{ url_for('computers.remove', computer_name=name) }}"
+                                  class="d-inline" onsubmit="return confirm('Remove computer {{ name }}?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-outline-danger btn-action">
+                                    <i class="bi bi-trash"></i> Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-pc-display"></i>
+            <p>No computers found in the domain.</p>
+            <a href="{{ url_for('computers.create') }}" class="btn btn-info">Add the first computer</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

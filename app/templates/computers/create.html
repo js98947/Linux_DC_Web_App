@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Add Computer - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-plus-circle"></i> Add Computer to Domain</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('computers.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Computers
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" class="row g-3">
+            {{ form.hidden_tag() }}
+
+            <div class="col-md-6">
+                <label class="form-label">Computer Name <span class="text-danger">*</span></label>
+                {{ form.computer_name(class="form-control", placeholder="WORKSTATION-01") }}
+                {% for error in form.computer_name.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+                <div class="form-text">NetBIOS name of the computer to join to the domain.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">IP Address</label>
+                {{ form.ip_address(class="form-control", placeholder="192.168.1.100") }}
+                <div class="form-text">Optional. Static IP for DNS registration.</div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Description</label>
+                {{ form.description(class="form-control", placeholder="Marketing department workstation") }}
+            </div>
+
+            <div class="col-12">
+                {{ form.submit(class="btn btn-info") }}
+                <a href="{{ url_for('computers.index') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Joining a Computer to the Domain</h5>
+    </div>
+    <div class="card-body">
+        <p>After creating the computer account here, join the machine to the domain:</p>
+        <h6>Windows</h6>
+        <pre class="bg-dark p-3 rounded"><code>netdom join COMPUTER-NAME /domain:{{ config.SAMBA_REALM }} /userd:Administrator /passwordd:*</code></pre>
+        <h6>Linux</h6>
+        <pre class="bg-dark p-3 rounded"><code>sudo net ads join -U Administrator</code></pre>
+    </div>
+</div>
+{% endblock %}

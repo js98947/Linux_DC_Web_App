@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+    </div>
+</div>
+
+{% if errors %}
+<div class="alert alert-warning">
+    <strong>Some data could not be loaded:</strong>
+    <ul class="mb-0 mt-1">
+        {% for err in errors %}
+        <li>{{ err }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-primary">{{ stats.user_count }}</div>
+                <div class="stat-label">Users</div>
+                <a href="{{ url_for('users.index') }}" class="btn btn-outline-primary btn-sm mt-3">
+                    <i class="bi bi-people"></i> Manage Users
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-success">{{ stats.group_count }}</div>
+                <div class="stat-label">Groups</div>
+                <a href="{{ url_for('groups.index') }}" class="btn btn-outline-success btn-sm mt-3">
+                    <i class="bi bi-diagram-3"></i> Manage Groups
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-info">{{ stats.computer_count }}</div>
+                <div class="stat-label">Computers</div>
+                <a href="{{ url_for('computers.index') }}" class="btn btn-outline-info btn-sm mt-3">
+                    <i class="bi bi-pc-display"></i> Manage Computers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Domain Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr>
+                        <th>Domain Functional Level</th>
+                        <td>{{ stats.domain_level }}</td>
+                    </tr>
+                    <tr>
+                        <th>Realm</th>
+                        <td>{{ config.SAMBA_REALM }}</td>
+                    </tr>
+                    <tr>
+                        <th>DC Host</th>
+                        <td>{{ config.SAMBA_DC_HOST }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('users.create') }}" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-person-plus"></i> Create New User
+                    </a>
+                    <a href="{{ url_for('groups.create') }}" class="btn btn-outline-success text-start">
+                        <i class="bi bi-people"></i> Create New Group
+                    </a>
+                    <a href="{{ url_for('computers.create') }}" class="btn btn-outline-info text-start">
+                        <i class="bi bi-pc-display"></i> Add Computer to Domain
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

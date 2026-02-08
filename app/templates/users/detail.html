@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}{{ username }} - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-person"></i> {{ username }}</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('users.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Users
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- User attributes -->
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Account Details</h5>
+                <div>
+                    <form method="POST" action="{{ url_for('users.enable', username=username) }}" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-check-circle"></i> Enable
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ url_for('users.disable', username=username) }}" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-pause-circle"></i> Disable
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ url_for('users.remove', username=username) }}" class="d-inline"
+                          onsubmit="return confirm('Permanently delete user {{ username }}?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table detail-table mb-0">
+                    {% for key, value in user_info.items() %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        <td>
+                            {% if value is string %}
+                                {{ value }}
+                            {% else %}
+                                {% for v in value %}
+                                    <div>{{ v }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions sidebar -->
+    <div class="col-md-5">
+        <!-- Reset Password -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-key"></i> Reset Password</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('users.reset_pwd', username=username) }}">
+                    {{ password_form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        {{ password_form.new_password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        {{ password_form.confirm_password(class="form-control") }}
+                    </div>
+                    {{ password_form.submit(class="btn btn-warning") }}
+                </form>
+            </div>
+        </div>
+
+        <!-- Set Expiry -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Account Expiry</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('users.expiry', username=username) }}">
+                    {{ expiry_form.hidden_tag() }}
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ expiry_form.no_expiry(class="form-check-input") }}
+                            <label class="form-check-label">Never expires</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Or expire in (days)</label>
+                        {{ expiry_form.days(class="form-control", placeholder="90") }}
+                    </div>
+                    {{ expiry_form.submit(class="btn btn-info") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

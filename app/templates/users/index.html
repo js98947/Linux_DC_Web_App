@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Users - DC Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col">
+        <h2><i class="bi bi-people"></i> Users</h2>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('users.create') }}" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Create User
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if usernames %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for username in usernames %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index }}</td>
+                        <td>
+                            <a href="{{ url_for('users.detail', username=username) }}">
+                                <i class="bi bi-person"></i> {{ username }}
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('users.detail', username=username) }}"
+                               class="btn btn-outline-secondary btn-action">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <form method="POST" action="{{ url_for('users.remove', username=username) }}"
+                                  class="d-inline" onsubmit="return confirm('Delete user {{ username }}?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-outline-danger btn-action">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <p>No users found.</p>
+            <a href="{{ url_for('users.create') }}" class="btn btn-primary">Create the first user</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
