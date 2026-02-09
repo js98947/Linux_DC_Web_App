@@ -13,12 +13,11 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
-    form_valid = form.validate_on_submit()
     if request.method == "POST":
-        print(f"[DEBUG AUTH] POST received, form valid: {form_valid}")
-        if not form_valid:
+        print(f"[DEBUG AUTH] POST received, form valid: {form.validate_on_submit()}")
+        if not form.validate_on_submit():
             print(f"[DEBUG AUTH] Form errors: {form.errors}")
-    if form_valid:
+    if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
         print(f"[DEBUG AUTH] Attempting login for user: {username}")
