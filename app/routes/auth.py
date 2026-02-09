@@ -13,11 +13,18 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    if request.method == "POST":
+        print(f"[DEBUG AUTH] POST received, form valid: {form.validate_on_submit()}")
+        if not form.validate_on_submit():
+            print(f"[DEBUG AUTH] Form errors: {form.errors}")
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        print(f"[DEBUG AUTH] Attempting login for user: {username}")
         try:
-            if authenticate_user(username, password):
+            result = authenticate_user(username, password)
+            print(f"[DEBUG AUTH] authenticate_user returned: {result}")
+            if result:
                 user = get_or_create_session_user(username)
                 login_user(user)
                 next_page = request.args.get("next")
@@ -26,6 +33,7 @@ def login():
             else:
                 flash("Invalid username or password.", "danger")
         except SambaError as e:
+            print(f"[DEBUG AUTH] SambaError during login: {e}")
             flash(f"Authentication error: {e}", "danger")
     return render_template("login.html", form=form)
 

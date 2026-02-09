@@ -32,12 +32,22 @@ def _run_samba_tool(args, password=None):
     if password:
         cmd += ["--password", password]
 
+    # Debug: show command with password masked
+    safe_cmd = [c if c != password else "****" for c in cmd] if password else cmd
+    print(f"[DEBUG SAMBA] Running: {' '.join(safe_cmd)}")
+
     result = subprocess.run(
         cmd,
         capture_output=True,
         text=True,
         timeout=30,
     )
+
+    print(f"[DEBUG SAMBA] Return code: {result.returncode}")
+    if result.stdout.strip():
+        print(f"[DEBUG SAMBA] stdout: {result.stdout.strip()[:200]}")
+    if result.stderr.strip():
+        print(f"[DEBUG SAMBA] stderr: {result.stderr.strip()[:200]}")
 
     if result.returncode != 0:
         error_msg = result.stderr.strip() or result.stdout.strip() or "Unknown error"
@@ -217,16 +227,18 @@ def domain_info():
 def authenticate_user(username, password):
     """Attempt to authenticate a user against Samba AD.
 
-    Uses samba-tool to verify credentials. Returns True on success.
+    Uses samba-tool to verify credentials via LDAP bind. Returns True on success.
     """
     try:
         ldap_uri = current_app.config.get("LDAP_URI", "ldap://localhost")
+        print(f"[DEBUG AUTH] authenticate_user called for '{username}', LDAP URI: {ldap_uri}")
         _run_samba_tool(
-            ["user", "show", username, "-H", ldap_uri, "--username", username],
-            password=password,
+            ["user", "show", username, "-H", ldap_uri,
+             "-U", f"{username}%{password}"],
         )
         return True
-    except SambaError:
+    except SambaError as e:
+        print(f"[DEBUG AUTH] authenticate_user failed: {e}")
         return False
 
 
