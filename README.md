@@ -18,18 +18,20 @@ A web application for managing a Samba Active Directory domain controller runnin
 
 ## Quick Start
 
+> **Note:** The default install path `/opt/dc-manager` is owned by root.
+> Run the following commands as root (or prefix them with `sudo`).
+
 ```bash
-# Clone the repo
-git clone <repo-url> /opt/dc-manager
+# Clone the repo (as root)
+sudo git clone <repo-url> /opt/dc-manager
 cd /opt/dc-manager
 
 # Create virtualenv and install
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+sudo python3 -m venv venv
+sudo /opt/dc-manager/venv/bin/pip install -r requirements.txt
 
 # Configure
-cp .env.example .env
+sudo cp .env.example .env
 # Edit .env with your domain settings:
 #   SAMBA_REALM=YOUR.DOMAIN
 #   SAMBA_DOMAIN=YOUR
@@ -37,10 +39,10 @@ cp .env.example .env
 #   SECRET_KEY=<random-string>
 
 # Run (development)
-python run.py
+sudo /opt/dc-manager/venv/bin/python run.py
 
 # Run (production with gunicorn)
-gunicorn --config gunicorn.conf.py wsgi:application
+sudo /opt/dc-manager/venv/bin/gunicorn --config gunicorn.conf.py wsgi:application
 ```
 
 The app listens on `http://0.0.0.0:5000` by default. Log in with an AD administrator account.
@@ -99,6 +101,6 @@ All settings are in `.env` (see `.env.example`):
 ## Running Tests
 
 ```bash
-pip install pytest
-python -m pytest tests/ -v
+sudo /opt/dc-manager/venv/bin/pip install pytest
+sudo /opt/dc-manager/venv/bin/python -m pytest tests/ -v
 ```
