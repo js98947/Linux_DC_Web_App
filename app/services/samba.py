@@ -220,8 +220,9 @@ def authenticate_user(username, password):
     Uses samba-tool to verify credentials. Returns True on success.
     """
     try:
+        ldap_uri = current_app.config.get("LDAP_URI", "ldap://localhost")
         _run_samba_tool(
-            ["user", "show", username, "--username", username],
+            ["user", "show", username, "-H", ldap_uri, "--username", username],
             password=password,
         )
         return True
